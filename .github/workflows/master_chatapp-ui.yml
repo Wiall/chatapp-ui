@@ -32,9 +32,6 @@ jobs:
       - name: Build the React app
         run: npm run build
 
-      - name: Show Azure subscriptions
-        run: az account list --output table
-
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -42,6 +39,9 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A64CCBE8A6A24E0CABAF17A2C1576721 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_13992AE8F3A04DEAAC7607595A389AB6 }}
           allow-no-subscriptions: true
+
+      - name: Show Azure subscriptions
+        run: az account list --output table
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
