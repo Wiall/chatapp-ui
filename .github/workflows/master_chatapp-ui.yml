@@ -40,9 +40,6 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_13992AE8F3A04DEAAC7607595A389AB6 }}
           allow-no-subscriptions: true
 
-      - name: Show Azure subscriptions
-        run: az account list --output table
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
