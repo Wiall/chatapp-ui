@@ -40,10 +40,22 @@ jobs:
           # subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_13992AE8F3A04DEAAC7607595A389AB6 }}
           allow-no-subscriptions: true
 
+      - name: Debug subscription
+        run: |
+          echo "Subscription ID length: ${#AZURE_SUBSCRIPTION_ID}"
+          if [ -z "$AZURE_SUBSCRIPTION_ID" ]; then
+            echo "AZURE_SUBSCRIPTION_ID is empty or not set"
+            exit 1
+          fi
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Set Azure Subscription
         run: |
-          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          az account set --subscription "$AZURE_SUBSCRIPTION_ID"
           az account show
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
