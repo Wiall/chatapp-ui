@@ -5,7 +5,7 @@ import "./Chat.css"; // для стилів
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState("User" + Math.floor(Math.random() * 100));
+  const [user] = useState("User" + Math.floor(Math.random() * 100));
 
   useEffect(() => {
     connection.on("ReceiveMessage", (user, message, sentiment) => {
