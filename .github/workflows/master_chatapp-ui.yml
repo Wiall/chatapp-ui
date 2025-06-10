@@ -40,8 +40,20 @@ jobs:
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_595B97317DC643589AE7879434309B4E }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A64CCBE8A6A24E0CABAF17A2C1576721 }}
-          subscription-id: "6285da9b-42f8-4166-a4cf-8cb82dd78814"
+          # subscription-id: "6285da9b-42f8-4166-a4cf-8cb82dd78814"  # Закоментуйте цю лінію
           allow-no-subscriptions: true
+          enable-AzPSSession: false
+          environment: azurecloud
+          audience: api://AzureADTokenExchange
+          auth-type: SERVICE_PRINCIPAL
+
+      - name: Debug available subscriptions
+        run: |
+          echo "=== Available subscriptions for Service Principal ==="
+          az account list --output table
+
+          echo "=== Current account details ==="
+          az account show --output table || echo "No active subscription"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
