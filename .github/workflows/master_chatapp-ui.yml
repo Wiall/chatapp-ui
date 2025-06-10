@@ -40,7 +40,7 @@ jobs:
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_595B97317DC643589AE7879434309B4E }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A64CCBE8A6A24E0CABAF17A2C1576721 }}
-          # subscription-id: "6285da9b-42f8-4166-a4cf-8cb82dd78814"  # Закоментуйте цю лінію
+          subscription-id: "6285da9b-42f8-4166-a4cf-8cb82dd78814"
           allow-no-subscriptions: true
           enable-AzPSSession: false
           environment: azurecloud
