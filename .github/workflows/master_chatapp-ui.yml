@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Deploy React app to Azure Web App - chatapp-ui
 
 on:
@@ -35,53 +38,10 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_595B97317DC643589AE7879434309B4E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A64CCBE8A6A24E0CABAF17A2C1576721 }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           allow-no-subscriptions: true
-          enable-AzPSSession: false
-          environment: azurecloud
-          audience: api://AzureADTokenExchange
-          auth-type: SERVICE_PRINCIPAL
-
-      - name: Smart subscription selection
-        run: |
-          echo "=== Checking subscription access ==="
-
-          # Спробуємо спочатку встановити цільову підписку
-          if [ -n "$TARGET_SUBSCRIPTION" ]; then
-            echo "Attempting to use target subscription..."
-            if az account set --subscription "$TARGET_SUBSCRIPTION" 2>/dev/null; then
-              echo "✅ Successfully set target subscription"
-              az account show --output table
-              exit 0
-            else
-              echo "❌ Target subscription not accessible"
-            fi
-          fi
-
-          # Використовуємо першу доступну
-          echo "=== Using first available subscription ==="
-          FIRST_SUB=$(az account list --query '[0].id' -o tsv)
-
-          if [ -z "$FIRST_SUB" ]; then
-            echo "❌ No subscriptions available"
-            echo "Service Principal may not have proper permissions"
-            exit 1
-          fi
-
-          echo "Using subscription: $FIRST_SUB"
-          az account set --subscription "$FIRST_SUB"
-          az account show --output table
-
-          # Експортуємо для деплойменту
-          echo "DEPLOYMENT_SUBSCRIPTION_ID=$FIRST_SUB" >> $GITHUB_ENV
-        env:
-          TARGET_SUBSCRIPTION: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: "chatapp-ui"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
