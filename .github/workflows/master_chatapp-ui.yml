@@ -1,63 +1,31 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Deploy React app to Azure Web App - chatapp-ui
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
     branches:
+      - master # або main, залежно від твоєї гілки
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
       - master
-  workflow_dispatch:
-
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
-  build-and-deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
-
+    name: Build and Deploy Job
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Allow warnings temporarily
-        run: unset CI
-
-      - name: Build the React app
-        run: npm run build
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_595B97317DC643589AE7879434309B4E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A64CCBE8A6A24E0CABAF17A2C1576721 }}
-          subscription-id: "6285da9b-42f8-4166-a4cf-8cb82dd78814"
-          allow-no-subscriptions: true
-          enable-AzPSSession: false
-          environment: azurecloud
-          audience: api://AzureADTokenExchange
-          auth-type: SERVICE_PRINCIPAL
-
-      - name: Debug available subscriptions
+      - name: Build App
         run: |
-          echo "=== Available subscriptions for Service Principal ==="
-          az account list --output table
+          npm install
+          npm run build
 
-          echo "=== Current account details ==="
-          az account show --output table || echo "No active subscription"
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+      - name: Upload artifact and deploy
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          app-name: "chatapp-ui"
-          slot-name: "Production"
-          package: "./build"
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # автоматично додається GitHub
+          action: "upload"
+          app_location: "/" # корінь репозиторію
+          output_location: "build" # або dist, якщо це Vue або інше
